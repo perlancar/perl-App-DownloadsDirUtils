@@ -84,7 +84,7 @@ MARKDOWN
         summary => "Move the $which file(s) from the downloads directories to current directory",
         description => <<"MARKDOWN",
 
-This is a thin wrapper for the <prog:${which}_download> utility; the wrapper
+This is a thin wrapper for the <prog:${which}-download> utility; the wrapper
 moves the files to current directory. It hopes to be a convenient helper to
 organize your downloads.
 
