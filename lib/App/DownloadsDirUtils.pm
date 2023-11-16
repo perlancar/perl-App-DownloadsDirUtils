@@ -1,4 +1,4 @@
-package App::DownloadsDirsUtils;
+package App::DownloadsDirUtils;
 
 use 5.010001;
 use strict;
@@ -44,7 +44,7 @@ sub list_downloads_dirs {
     wantarray ? @res : \@res;
 }
 
-for my $which (qw/foremost hindmost newest oldest/) {
+for my $which (qw/foremost hindmost largest smallest newest oldest/) {
     my $res = gen_modified_sub(
         summary => "Return the $which file(s) in the downloads directories",
         description => <<"MARKDOWN",
@@ -54,8 +54,8 @@ default for the directories to the downloads directories, as well as by default
 excluding partial downloads (`*.part` files).
 
 MARKDOWN
-        output_name => "${which}_download",
-        base_name   => 'App::FileSortUtils::newest',
+        output_name => __PACKAGE__ . "::${which}_download",
+        base_name   => "App::FileSortUtils::$which",
         modify_args => {
             dirs => sub {
                 my $arg_spec = shift;
@@ -65,6 +65,12 @@ MARKDOWN
                 my $arg_spec = shift;
                 $arg_spec->{default} = qr/\.part\z/;
             },
+        },
+        output_code => sub {
+            no strict 'refs'; ## no critic: TestingAndDebugging::ProhibitNoStrict
+            my %args = @_;
+            $args{dirs} //= scalar list_downloads_dirs();
+            &{"App::FileSortUtils::$which"}(%args);
         },
     );
     die "Can't generate ${which}_download(): $res->[0] - $res->[1]"
