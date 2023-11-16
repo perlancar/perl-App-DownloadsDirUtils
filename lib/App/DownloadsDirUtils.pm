@@ -63,13 +63,14 @@ MARKDOWN
             },
             exclude_filename_pattern => sub {
                 my $arg_spec = shift;
-                $arg_spec->{default} = qr/\.part\z/;
+                $arg_spec->{default} = '/\.part\z/';
             },
         },
         output_code => sub {
             no strict 'refs'; ## no critic: TestingAndDebugging::ProhibitNoStrict
             my %args = @_;
             $args{dirs} //= scalar list_downloads_dirs();
+            $args{exclude_filename_pattern} //= qr/\.part\z/;
             &{"App::FileSortUtils::$which"}(%args);
         },
     );
