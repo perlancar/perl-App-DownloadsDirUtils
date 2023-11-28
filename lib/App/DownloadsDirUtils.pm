@@ -6,7 +6,7 @@ use warnings;
 use Log::ger;
 
 use Exporter 'import';
-use App::FileSortUtils;
+use File::Util::Sort;
 use Perinci::Object;
 use Perinci::Sub::Util qw(gen_modified_sub);
 
@@ -58,7 +58,7 @@ excluding partial downloads (`*.part` files).
 
 MARKDOWN
         output_name => __PACKAGE__ . "::${which}_download",
-        base_name   => "App::FileSortUtils::$which",
+        base_name   => "File::Util::Sort::$which",
         modify_args => {
             dirs => sub {
                 my $arg_spec = shift;
@@ -74,7 +74,7 @@ MARKDOWN
             my %args = @_;
             $args{dirs} //= scalar list_downloads_dirs();
             $args{exclude_filename_pattern} //= qr/\.part\z/;
-            &{"App::FileSortUtils::$which"}(%args);
+            &{"File::Util::Sort::$which"}(%args);
         },
     );
     die "Can't generate ${which}_download(): $res->[0] - $res->[1]"
