@@ -130,11 +130,11 @@ MARKDOWN
                 if (-e $targetpath && !$args{overwrite}) {
                     $envres->add_result(409, "File already exist '$targetpath', please specify -O to overwrite", {item_id=>$file});
                 } elsif ($args{-dry_run}) {
-                    log_info "DRY-RUN: [%d/%d] Moving %s to %s ...", $i, scalar(@{ $res->[2] }), $file, $to_dir;
+                    log_info "DRY-RUN: [%d/%d] Moving %s to %s ...", $i, scalar(@{ $res->[2] }), $file, $targetpath;
                     $envres->add_result(200, "OK (dry-run)", {item_id=>$file});
                 } else {
-                    log_info "[%d/%d] Moving %s to %s ...", $i, scalar(@{ $res->[2] }), $file, $to_dir;
-                    my $ok = File::Copy::Recursive::rmove($file, $to_dir);
+                    log_info "[%d/%d] Moving %s to %s ...", $i, scalar(@{ $res->[2] }), $file, $targetpath;
+                    my $ok = File::Copy::Recursive::rmove($file, $targetpath);
                     if ($ok) {
                         $envres->add_result(200, "OK", {item_id=>$file});
                     } else {
