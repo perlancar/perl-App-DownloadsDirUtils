@@ -96,6 +96,14 @@ MARKDOWN
                 schema => 'dirname*',
                 default => '.',
             },
+            overwrite => {
+                schema => 'true*',
+                cmdline_aliases => {O=>{}},
+            },
+            as => {
+                summary => 'Rename file',
+                schema => 'pathname::unix::basename*',
+            },
         },
         modify_meta => sub {
             my $meta = shift;
@@ -118,7 +126,10 @@ MARKDOWN
             my $i = 0;
             for my $file (@{ $res->[2] }) {
                 $i++;
-                if ($args{-dry_run}) {
+                my $targetpath = $to_dir . '/' . ($args{as} // $file);
+                if (-e $targetpath && !$args{overwrite}) {
+                    $envres->add_result(409, "File already exist '$targetpath', please specify -O to overwrite", {item_id=>$file});
+                } elsif ($args{-dry_run}) {
                     log_info "DRY-RUN: [%d/%d] Moving %s to %s ...", $i, scalar(@{ $res->[2] }), $file, $to_dir;
                     $envres->add_result(200, "OK (dry-run)", {item_id=>$file});
                 } else {
