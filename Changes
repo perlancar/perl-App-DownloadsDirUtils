@@ -1,3 +1,8 @@
+0.008   2025-05-03  Released-By: PERLANCAR; Urgency: medium
+
+        - Update prereqs version (fix bug in prereq File::Util::Sort).
+
+
 0.007   2023-12-12  Released-By: PERLANCAR; Urgency: high
 
         - [bugfix] Do not add original file's directory as target name.
