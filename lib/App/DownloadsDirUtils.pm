@@ -112,6 +112,7 @@ MARKDOWN
         },
         output_code => sub {
             no strict 'refs'; ## no critic: TestingAndDebugging::ProhibitNoStrict
+            require File::Basename;
             require File::Copy::Recursive;
 
             my %args = @_;
@@ -126,7 +127,7 @@ MARKDOWN
             my $i = 0;
             for my $file (@{ $res->[2] }) {
                 $i++;
-                my $targetpath = $to_dir . '/' . ($args{as} // $file);
+                my $targetpath = $to_dir . '/' . ($args{as} // File::Basename::basename($file));
                 if (-e $targetpath && !$args{overwrite}) {
                     $envres->add_result(409, "File already exists '$targetpath', please specify -O to overwrite", {item_id=>$file});
                 } elsif ($args{-dry_run}) {
